@@ -1,5 +1,5 @@
 defmodule Jason.Structs.Decoder do
-  def decode(json, struc_module) do
+  def decode(json, struc_module \\ nil) do
     case Jason.decode(json) do
       {:ok, map} ->
         map
