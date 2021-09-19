@@ -1,0 +1,58 @@
+{
+  "address": {
+    "city": "Yambol",
+    "country": {
+      "code": "bg",
+      "name": "Bulgaria"
+    },
+    "postCode": "8600",
+    "streetAddressLineOne": "jk. Graph Ignatiev",
+    "streetAddressLineTwo": "bl. 72"
+  },
+  "age": 35,
+  "children": [
+    {
+      "address": {
+        "city": "Yambol",
+        "country": {
+          "code": "bg",
+          "name": "Bulgaria"
+        },
+        "postCode": "8600",
+        "streetAddressLineOne": "jk. Graph Ignatiev",
+        "streetAddressLineTwo": "bl. 72"
+      },
+      "age": 10,
+      "interests": [
+        {
+          "description": "A FPS!",
+          "name": "Call Of Duty"
+        },
+        {
+          "description": "Blocks and stuff!",
+          "name": "Minecraft"
+        }
+      ],
+      "likesJsonStructs": false,
+      "name": "Ivan Petrov",
+      "sex": "male"
+    }
+  ],
+  "interests": [
+    {
+      "description": "Some people running after a ball and kicking it.",
+      "name": "football"
+    },
+    {
+      "description": "Alcoholic bevarage, very loved on the Balkans.",
+      "name": "rakia"
+    },
+    {
+      "description": "Obicham shopskata salata, mastika ledena da pia.",
+      "name": "salata"
+    }
+  ],
+  "likesJsonStructs": false,
+  "name": "Petur Petrov",
+  "sex": "male"
+}

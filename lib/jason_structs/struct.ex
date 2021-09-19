@@ -5,6 +5,8 @@ defmodule Jason.Structs.Struct do
       use TypedStruct
       import Jason.Structs.Struct, only: [jason_struct: 1]
 
+      IO.puts("??")
+
       defimpl Jason.Encoder, for: [__MODULE__] do
         @impl true
         def encode(data, options) do

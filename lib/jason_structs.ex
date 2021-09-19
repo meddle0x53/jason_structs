@@ -1,7 +1,10 @@
 defmodule Jason.Structs do
   alias Jason.Formatter
 
-  @type encode_opt :: {:escape, :json | :unicode_safe | :html_safe | :javascript_safe} | {:maps, :naive | :strict} | {:pretty, boolean | Formatter.opts()}
+  @type encode_opt ::
+          {:escape, :json | :unicode_safe | :html_safe | :javascript_safe}
+          | {:maps, :naive | :strict}
+          | {:pretty, boolean | Formatter.opts()}
 
   @spec encode(term, [encode_opt]) ::
           {:ok, String.t()} | {:error, EncodeError.t() | Exception.t()}
