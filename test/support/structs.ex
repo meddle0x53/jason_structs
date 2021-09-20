@@ -36,7 +36,7 @@ defmodule User do
     field(:age, integer(), enforce: true)
     field(:sex, :male | :female, enforce: true, default: :female)
     field(:address, Address.t(), enforce: true)
-    field(:interests, list(), excludable: true, default: [])
+    field(:interests, [Interest.t()], excludable: true, default: [])
     field(:children, [User.t()], excludable: true)
     field(:likes_json_structs, boolean(), default: true)
   end

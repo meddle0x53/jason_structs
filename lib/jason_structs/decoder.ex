@@ -1,10 +1,29 @@
 defmodule Jason.Structs.Decoder do
+  @moduledoc """
+  A JSON Decoder that can decode a JSON to a `Jason.Structs` struct, if its modul is provided.
+
+  The decoding process is recursive and if the strcut has fields that are `Jason.Structs` structs,
+  they are also decoded.
+
+  If the struct has fields, that are normal structs they'll be decoded as maps.
+  """
+
+  @doc """
+  Decods the passed iodata JSON to a struct of the given `struc_module` type.
+
+  If the `struc_module` is passed as `nil`, the result is just a map.
+  """
+  @spec decode(json :: iodata(), struc_module :: module() | nil) ::
+          {:ok, map()} | {:error, term()}
   def decode(json, struc_module \\ nil) do
     case Jason.decode(json) do
       {:ok, map} ->
-        map
-        |> keys_to_snake_style_atoms()
-        |> to_struct(struc_module)
+        result =
+          map
+          |> keys_to_snake_style_atoms()
+          |> to_struct(struc_module)
+
+        {:ok, result}
 
       {:error, _} = error ->
         error
@@ -31,7 +50,10 @@ defmodule Jason.Structs.Decoder do
   defp to_struct(map, struc_module) when is_map(map) and is_atom(struc_module) do
     updated_map =
       Enum.reduce(map, %{}, fn {key, value}, acc ->
-        Map.put_new(acc, key, to_struct(value, Map.get(struc_module.sub_structs(), key)))
+        struct_m = Map.get(struc_module.sub_structs(), key)
+        type_info = Map.get(struc_module.type_data(), key)
+
+        Map.put_new(acc, key, to_struct(value, struct_m || type_info))
       end)
 
     struct(struc_module, updated_map)
@@ -39,6 +61,11 @@ defmodule Jason.Structs.Decoder do
 
   defp to_struct(list, struc_module) when is_list(list) and is_atom(struc_module) do
     Enum.map(list, fn entry -> to_struct(entry, struc_module) end)
+  end
+
+  # TODO validation
+  defp to_struct(value, {:enum, _values}) do
+    String.to_existing_atom(value)
   end
 
   defp to_struct(value, _), do: value

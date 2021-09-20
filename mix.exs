@@ -1,7 +1,7 @@
 defmodule JasonStructs.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.2.0"
 
   def project do
     [
@@ -15,7 +15,8 @@ defmodule JasonStructs.MixProject do
         source_ref: "v#{@version}",
         source_url: "https://github.com/meddle0x53/jason_structs"
       ],
-      description: "A Jason plugin library that adds the ability to encode and decode structs to and from JSON",
+      description:
+        "A Jason plugin library that adds the ability to encode and decode structs to and from JSON",
       package: package(),
       elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps()

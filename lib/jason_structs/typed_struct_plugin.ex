@@ -3,10 +3,11 @@ defmodule Jason.Structs.TypedStructPlugin do
 
   @impl true
   @spec init(keyword()) :: Macro.t()
-  defmacro init(opts) do
+  defmacro init(_opts) do
     quote do
       Module.register_attribute(__MODULE__, :sub_structs, accumulate: true)
       Module.register_attribute(__MODULE__, :excludable_keys, accumulate: true)
+      Module.register_attribute(__MODULE__, :types_info, accumulate: true)
     end
   end
 
@@ -44,6 +45,18 @@ defmodule Jason.Structs.TypedStructPlugin do
 
     is_excludable = opts[:excludable]
 
+    type_data =
+      case type do
+        {{:., _, [{:__aliases__, _, [atom]}, :t]}, _, _} ->
+          {:struct, atom}
+
+        {:|, _, values} ->
+          {:enum, values}
+
+        {simple_type, _, _} ->
+          {:simple_type, simple_type}
+      end
+
     quote do
       unless is_nil(unquote(module)) do
         Module.put_attribute(__MODULE__, :sub_structs, {unquote(name), unquote(module)})
@@ -52,6 +65,8 @@ defmodule Jason.Structs.TypedStructPlugin do
       if unquote(is_excludable) == true do
         Module.put_attribute(__MODULE__, :excludable_keys, unquote(name))
       end
+
+      Module.put_attribute(__MODULE__, :types_info, {unquote(name), unquote(type_data)})
     end
   end
 
@@ -67,6 +82,11 @@ defmodule Jason.Structs.TypedStructPlugin do
         @excludable_keys
       end
 
+      def type_data do
+        Map.new(@types_info)
+      end
+
+      Module.delete_attribute(__MODULE__, :types_info)
       Module.delete_attribute(__MODULE__, :excludable_keys)
       Module.delete_attribute(__MODULE__, :sub_structs)
     end

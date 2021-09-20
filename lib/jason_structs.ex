@@ -13,7 +13,7 @@ defmodule Jason.Structs do
   @spec encode!(term, [encode_opt]) :: String.t() | no_return
   defdelegate encode!(term, encode_opts \\ []), to: Jason
 
-  @spec decode(charlist, atom) :: {:ok, term} | {:error, DecodeError.t()}
+  @spec decode(iodata, atom) :: {:ok, term} | {:error, DecodeError.t()}
   defdelegate decode(bitstring_or_char_list, struct_module), to: Jason.Structs.Decoder
 
   @spec decode!(iodata, atom()) :: term | no_return
