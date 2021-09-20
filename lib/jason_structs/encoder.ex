@@ -14,7 +14,7 @@ defmodule Jason.Structs.Encoder do
   @doc """
   Implements the Jason.Encoder.encode function for `Jason.Structs` structs.
   """
-  @spec encode(data :: Map.t(), opts()) :: iodata()
+  @spec encode(data :: map(), opts()) :: iodata()
   def encode(data, options) do
     module = Map.get(data, :__struct__)
     to_exclude_if_nil = Kernel.apply(module, :excludable_keys, [])
