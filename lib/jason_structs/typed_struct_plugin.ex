@@ -1,4 +1,13 @@
 defmodule Jason.Structs.TypedStructPlugin do
+  @moduledoc """
+  A [Typed Struct](https://github.com/ejpcmac/typed_struct) plugin, used to customize
+  a definition of a `TypedStruct`.
+
+  This plugin converts a `TypedStruct` into a `Jason.Structs.Struct` by adding
+  specific properties and functions needed for JSON encoding and decoding.
+
+  This plugin is applied automatically to any module with the expression `use Jason.Structs.Struct` in it.
+  """
   use TypedStruct.Plugin
 
   @impl true
@@ -51,7 +60,12 @@ defmodule Jason.Structs.TypedStructPlugin do
           {:struct, atom}
 
         {:|, _, values} ->
-          {:enum, values}
+          if Enum.all?(values, &is_atom/1) do
+            {:enum, values}
+          else
+            # TODO a sum type
+            {:sum, values}
+          end
 
         {simple_type, _, _} ->
           {:simple_type, simple_type}

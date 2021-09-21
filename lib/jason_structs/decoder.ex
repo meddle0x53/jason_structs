@@ -1,6 +1,6 @@
 defmodule Jason.Structs.Decoder do
   @moduledoc """
-  A JSON Decoder that can decode a JSON to a `Jason.Structs` struct, if its modul is provided.
+  A JSON Decoder that can decode a JSON to a `Jason.Structs` struct, if its module is provided.
 
   The decoding process is recursive and if the strcut has fields that are `Jason.Structs` structs,
   they are also decoded.
@@ -9,7 +9,7 @@ defmodule Jason.Structs.Decoder do
   """
 
   @doc """
-  Decods the passed iodata JSON to a struct of the given `struc_module` type.
+  Decodes the passed iodata JSON to a struct of the given `struc_module` type.
 
   If the `struc_module` is passed as `nil`, the result is just a map.
   """
@@ -63,9 +63,13 @@ defmodule Jason.Structs.Decoder do
     Enum.map(list, fn entry -> to_struct(entry, struc_module) end)
   end
 
-  # TODO validation
-  defp to_struct(value, {:enum, _values}) do
-    String.to_existing_atom(value)
+  # TODO validation, there is some problem in TypedStruct with sum of more than 3 values.
+  defp to_struct(value, {:enum, values}) do
+    values = Enum.map(values, &Atom.to_string/1)
+
+    if value in values do
+      String.to_existing_atom(value)
+    end
   end
 
   defp to_struct(value, _), do: value

@@ -12,7 +12,7 @@ defmodule Jason.Structs.Encoder do
   @opaque opts :: {escape(), encode_map()}
 
   @doc """
-  Implements the Jason.Encoder.encode function for `Jason.Structs` structs.
+  Implements the `Jason.Encoder.encode` function for `Jason.Structs` structs.
   """
   @spec encode(data :: map(), opts()) :: iodata()
   def encode(data, options) do
