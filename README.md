@@ -16,7 +16,7 @@ by adding `jason_structs` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:jason_structs, "~> 0.1.0"}
+    {:jason_structs, "~> 0.3.0"}
   ]
 end
 ```
