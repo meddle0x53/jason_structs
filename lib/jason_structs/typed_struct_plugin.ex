@@ -17,6 +17,15 @@ defmodule Jason.Structs.TypedStructPlugin do
       Module.register_attribute(__MODULE__, :sub_structs, accumulate: true)
       Module.register_attribute(__MODULE__, :excludable_keys, accumulate: true)
       Module.register_attribute(__MODULE__, :types_info, accumulate: true)
+
+      aliases =
+        __ENV__.aliases
+        |> Enum.map(fn {the_alias, module_path} ->
+          {the_alias |> Module.split() |> Enum.at(0), module_path |> Module.split()}
+        end)
+        |> Map.new()
+
+      Module.put_attribute(__MODULE__, :aliases, aliases)
     end
   end
 
@@ -30,11 +39,13 @@ defmodule Jason.Structs.TypedStructPlugin do
         type
       end
 
+    aliases = Module.get_attribute(opts[:this], :aliases, [])
+
     module =
       case type do
-        {{:., _, [{:__aliases__, _, [atom]}, :t]}, _, _}
-        when is_atom(atom) ->
-          module = Module.concat([:"Elixir", atom])
+        {{:., _, [{:__aliases__, _, module_path}, :t]}, _, _}
+        when is_list(module_path) ->
+          module = dealias_module_path(module_path, aliases)
 
           if module == opts[:this] do
             module
@@ -56,8 +67,8 @@ defmodule Jason.Structs.TypedStructPlugin do
 
     type_data =
       case type do
-        {{:., _, [{:__aliases__, _, [atom]}, :t]}, _, _} ->
-          {:struct, atom}
+        {{:., _, [{:__aliases__, _, module_path}, :t]}, _, _} ->
+          {:struct, module_path}
 
         {:|, _, values} ->
           if Enum.all?(values, &is_atom/1) do
@@ -103,6 +114,17 @@ defmodule Jason.Structs.TypedStructPlugin do
       Module.delete_attribute(__MODULE__, :types_info)
       Module.delete_attribute(__MODULE__, :excludable_keys)
       Module.delete_attribute(__MODULE__, :sub_structs)
+      Module.delete_attribute(__MODULE__, :aliases)
     end
   end
+
+  def dealias_module_path([module_name], aliases) do
+    actual_path =
+      aliases
+      |> Map.get(Atom.to_string(module_name), [module_name])
+
+    Module.concat([Enum.join(actual_path, ".")])
+  end
+
+  def dealias_module_path(path, _), do: Module.concat([:"Elixir" | path])
 end
