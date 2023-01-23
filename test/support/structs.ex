@@ -41,3 +41,43 @@ defmodule User do
     field(:likes_json_structs, boolean(), default: true)
   end
 end
+
+defmodule Billing do
+  defmodule InvoiceItem do
+    use Jason.Structs.Struct
+
+    jason_struct do
+      field(:name, String.t(), enforce: true)
+      field(:quantity, float(), enforce: true)
+      field(:unit_price, float(), enforce: true)
+      field(:subtotal, float(), enforce: true)
+    end
+  end
+
+  defmodule Invoice do
+    use Jason.Structs.Struct
+
+    alias Billing.InvoiceItem, as: Item
+
+    jason_struct do
+      field(:period, String.t(), enforce: true)
+      field(:due_date, String.t(), enforce: true)
+      field(:items, [Item.t()], enforce: true)
+      field(:subtotal, float(), enforce: true)
+    end
+  end
+
+  defmodule Account do
+    use Jason.Structs.Struct
+
+    alias Billing.Invoice
+
+    jason_struct do
+      field(:id, String.t(), enforce: true)
+      field(:contact_name, String.t(), enforce: true)
+      field(:contact_email, String.t(), enforce: true)
+      field(:billing_address, Address.t(), enforce: true)
+      field(:latest_invoice, Invoice.t(), enforce: true)
+    end
+  end
+end

@@ -11,6 +11,20 @@ defmodule Jason.Structs.DecoderTest do
     assert user == DummyData.user()
   end
 
+  test "decodes a JSON into a Jason struct with namespaced substructs" do
+    {:ok, json} = File.read("test/fixtures/billing_account_encoded.json")
+
+    # make sure that the modules are loaded so we don't run into issues with
+    # :erlang.binary_to_existing_atom during parse
+    Code.ensure_loaded!(Billing.Account)
+    Code.ensure_loaded!(Billing.Invoice)
+    Code.ensure_loaded!(Billing.InvoiceItem)
+
+    {:ok, account} = Decoder.decode(json, Billing.Account)
+
+    assert account == DummyData.billing_account()
+  end
+
   test "decodes a JSON into a map if a struct is not passed" do
     {:ok, json} = File.read("test/fixtures/pesho_encoded.json")
 

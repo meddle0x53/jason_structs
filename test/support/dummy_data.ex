@@ -48,4 +48,44 @@ defmodule DummyData do
       likes_json_structs: false
     }
   end
+
+  def invoice do
+    %Billing.Invoice{
+      period: "01/23",
+      due_date: "2023-01-31",
+      items: [
+        %Billing.InvoiceItem{
+          name: "Video Game",
+          unit_price: 60.0,
+          quantity: 1,
+          subtotal: 60.0,
+        },
+        %Billing.InvoiceItem{
+          name: "Another Video Game",
+          unit_price: 19.99,
+          quantity: 1,
+          subtotal: 19.99,
+        }
+      ],
+      subtotal: 79.99
+    }
+  end
+
+  def billing_account do
+    %Billing.Account{
+      id: "a:b-1",
+      contact_name: "Some Company",
+      contact_email: "contact@somecompany.com",
+      billing_address: %Address{
+        city: "Hill Valley, CA",
+        street_address_line_one: "1640 Riverside Drive",
+        post_code: "90999",
+        country: %Country{
+          code: "us",
+          name: "United States of America"
+        }
+      },
+      latest_invoice: invoice()
+    }
+  end
 end

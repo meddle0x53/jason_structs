@@ -1,0 +1,33 @@
+{
+  "billingAddress": {
+    "city": "Hill Valley, CA",
+    "country": {
+      "code": "us",
+      "name": "United States of America"
+    },
+    "postCode": "90999",
+    "streetAddressLineOne": "1640 Riverside Drive"
+  },
+  "contactEmail": "contact@somecompany.com",
+  "contactName": "Some Company",
+  "id": "a:b-1",
+  "latestInvoice": {
+    "dueDate": "2023-01-31",
+    "items": [
+      {
+        "name": "Video Game",
+        "quantity": 1,
+        "subtotal": 60.0,
+        "unitPrice": 60.0
+      },
+      {
+        "name": "Another Video Game",
+        "quantity": 1,
+        "subtotal": 19.99,
+        "unitPrice": 19.99
+      }
+    ],
+    "period": "01/23",
+    "subtotal": 79.99
+  }
+}
