@@ -34,7 +34,7 @@ defmodule JasonStructs.MixProject do
       {:ex_doc, "~> 0.19", only: :dev},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:jason, "~> 1.1"},
-      {:typed_struct, "~> 0.2.1"}
+      {:typed_struct, "~> 0.3.0"}
     ]
   end
 
